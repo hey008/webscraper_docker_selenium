@@ -6,13 +6,13 @@ Start Selenium Hub with Docker Compose
 ```sh
 docker-compose up
 ```
-**Note:**\
-Selenium hub run on port 4444. To check service is ready to use by access URL below:\
-http://localhost:4444/grid/console
+>**Note:**\
+>Selenium hub run on port 4444. To check service is ready to use by access URL below:\
+> http://localhost:4444/grid/console
 
 
 ## Python: Web Scraper script
-Get project Ready
+Get project ready
 ```sh
 python -m pip install --upgrade pip
 python -m venv venv
@@ -20,8 +20,10 @@ python -m venv venv
 # On Windows use this '.\venv\Scripts\activate.bat'
 pip install -r requirements.txt
 ```
-
+Start services
+```sh
+python services.py
+```
 
 ---
-__Author:__ \
-_Jirawit Inkhao_
+_Copyright © 2022 - Jirawit Inkhao_
