@@ -23,7 +23,7 @@ def web_scraper(url, drivertype='Remote'):
         print(f'URL is empty')
         return False
 
-    print(f'web_scraper: {url}')
+    print(f'{str(datetime.now())} | Scrape URL: {url}')
     
     if url_status(url):
         browser = get_browser(drivertype)
@@ -32,6 +32,7 @@ def web_scraper(url, drivertype='Remote'):
         html = browser.page_source
         write_2_file(html)
         browser.quit()
+        print(f'{str(datetime.now())} | Scrape URL Completed')
         return True
     
     return False
@@ -56,18 +57,19 @@ def get_browser(drivertype='Remote'):
                 options=options)
     else:
         driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    print(f'{str(datetime.now())} | Browser Opened: {drivertype}')
     return driver
 
 def connect_browser(url, browser):
     global debug_mode
     try:
         browser.get(url)
-        WebDriverWait(browser, 5).until(
-            EC.presence_of_element_located((By.ID, 'hnmain'))
-        )
+        WebDriverWait(browser, 5)
+        #WebDriverWait(browser, 5).until( EC.presence_of_element_located((By.ID, 'tag_id')) )
+        print(f'{str(datetime.now())} | Browser Connected: {url}')
         return True
     except Exception as ex:
-        print(f'Error connecting to {url}.')
+        print(f'{str(datetime.now())} | Error connecting to {url}.')
         if debug_mode == 1:
             print(f'{ex}')
     return False
@@ -82,10 +84,10 @@ def url_status(url):
             url, headers=headers, stream=True, timeout=3.000)
         # get page load time
         load_time = response.elapsed.total_seconds()
-        print(f'URL Check : Page load time: {load_time} seconds')
+        print(f'{str(datetime.now())} | URL Check: Page load time: {load_time} seconds')
         result = True
     except Exception as ex:
-        print(f'URL Check : Page load time: Error')
+        print(f'{str(datetime.now())} | URL Check: Page load time: Error')
         if debug_mode == 1:
             print(f'{ex}')
     return result
@@ -100,3 +102,4 @@ def write_2_file(html):
     f = open(filename, "a")
     f.write(str(soupobj.prettify().encode("utf-8")))
     f.close()
+    print(f'{str(datetime.now())} | HTML File Created: {filename}')
