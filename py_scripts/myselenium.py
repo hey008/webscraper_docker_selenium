@@ -1,14 +1,14 @@
-from ast import Global
+from fileinput import filename
 import requests
 from time import sleep
 from datetime import datetime
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 # Define Variables
@@ -29,8 +29,13 @@ def web_scraper(url, drivertype='Remote'):
         browser = get_browser(drivertype)
         connect_browser(url, browser)
         sleep(10)
-        html = browser.page_source
-        write_2_file(html)
+        filename = browser_mode +"-"+ str(datetime.now()).replace(":","").replace(" ","_").replace("-","")
+        write_html_file(browser.page_source, "HTMLs/"+ filename +".html")
+        try:
+            browser.save_screenshot("Screenshot/"+ filename + ".png")
+            print(f'{str(datetime.now())} | Making screenshot Completed: Screenshot/'+ filename + '.png')
+        except Exception as ex:
+            print(f'{str(datetime.now())} | Error..! Making screenshot ')
         browser.quit()
         print(f'{str(datetime.now())} | Scrape URL Completed')
         return True
@@ -92,14 +97,14 @@ def url_status(url):
             print(f'{ex}')
     return result
 
-def write_2_file(html):
-    global browser_mode
-
-    current_date = str(datetime.now())
-    filename = "HTMLs/"+ browser_mode +"-"+ str(current_date).replace(":","").replace(" ","_").replace("-","") + ".html"
+def write_html_file(html, filename=""):
+    if filename == "":
+        current_date = str(datetime.now())
+        filename = "HTMLs/"+ str(current_date).replace(":","").replace(" ","_").replace("-","") + ".html"
+    
     soupobj = BeautifulSoup(html, 'html.parser')
 
     f = open(filename, "a")
-    f.write(str(soupobj.prettify().encode("utf-8")))
+    f.write(str(soupobj.encode("utf-8")))
     f.close()
     print(f'{str(datetime.now())} | HTML File Created: {filename}')
