@@ -1,4 +1,4 @@
-from fileinput import filename
+import os
 import requests
 from time import sleep
 from datetime import datetime
@@ -22,6 +22,13 @@ def web_scraper(url, drivertype='Remote'):
     if url == "":
         print(f'URL is empty')
         return False
+    
+    os.makedirs('Storage/HTMLs', exist_ok=False)
+    os.makedirs('Storage/Screenshot', exist_ok=False)
+    
+    file_name = browser_mode +"-"+ str(datetime.now()).replace(":","").replace(" ","_").replace("-","")
+    file_html = "Storage/HTMLs/"+ file_name +".html"
+    file_screenshot = "Storage/Screenshot/"+ file_name + ".png"
 
     print(f'{str(datetime.now())} | Scrape URL: {url}')
     
@@ -29,13 +36,15 @@ def web_scraper(url, drivertype='Remote'):
         browser = get_browser(drivertype)
         connect_browser(url, browser)
         sleep(10)
-        filename = browser_mode +"-"+ str(datetime.now()).replace(":","").replace(" ","_").replace("-","")
-        write_html_file(browser.page_source, "HTMLs/"+ filename +".html")
+        
+        write_html_file(browser.page_source, file_html)
         try:
-            browser.save_screenshot("Screenshot/"+ filename + ".png")
-            print(f'{str(datetime.now())} | Making screenshot Completed: Screenshot/'+ filename + '.png')
+            browser.save_screenshot(file_screenshot)
+            print(f'{str(datetime.now())} | Making screenshot Completed: '+ file_screenshot)
         except Exception as ex:
             print(f'{str(datetime.now())} | Error..! Making screenshot ')
+            if debug_mode == 1:
+                print(f'{ex}')
         browser.quit()
         print(f'{str(datetime.now())} | Scrape URL Completed')
         return True
