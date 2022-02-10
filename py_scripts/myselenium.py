@@ -12,6 +12,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 # Define Variables
+storage_path = 'Storage/'
 browser_mode = 'Remote' # Remote: Docker Browser, Local: Machine Browser
 debug_mode = 0 # 0: Off, 1: On 
 
@@ -22,13 +23,13 @@ def web_scraper(url, drivertype='Remote'):
     if url == "":
         print(f'URL is empty')
         return False
-    
-    os.makedirs('Storage/HTMLs', exist_ok=False)
-    os.makedirs('Storage/Screenshot', exist_ok=False)
+
+    os.makedirs(storage_path + 'HTMLs', exist_ok=False)
+    os.makedirs(storage_path + 'Screenshot', exist_ok=False)
     
     file_name = browser_mode +"-"+ str(datetime.now()).replace(":","").replace(" ","_").replace("-","")
-    file_html = "Storage/HTMLs/"+ file_name +".html"
-    file_screenshot = "Storage/Screenshot/"+ file_name + ".png"
+    file_html = storage_path + 'HTMLs/'+ file_name +'.html'
+    file_screenshot = storage_path + 'Screenshot/'+ file_name + '.png'
 
     print(f'{str(datetime.now())} | Scrape URL: {url}')
     
@@ -36,8 +37,8 @@ def web_scraper(url, drivertype='Remote'):
         browser = get_browser(drivertype)
         connect_browser(url, browser)
         sleep(10)
-        
-        write_html_file(browser.page_source, file_html)
+        html = browser.page_source
+        write_html_file(html, file_html)
         try:
             browser.save_screenshot(file_screenshot)
             print(f'{str(datetime.now())} | Making screenshot Completed: '+ file_screenshot)
@@ -46,6 +47,7 @@ def web_scraper(url, drivertype='Remote'):
             if debug_mode == 1:
                 print(f'{ex}')
         browser.quit()
+        write_json_file(html)
         print(f'{str(datetime.now())} | Scrape URL Completed')
         return True
     
@@ -117,3 +119,6 @@ def write_html_file(html, filename=""):
     f.write(str(soupobj.encode("utf-8")))
     f.close()
     print(f'{str(datetime.now())} | HTML File Created: {filename}')
+
+def write_json_file(html, finename=""):
+    return True
