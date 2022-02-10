@@ -6,8 +6,8 @@ Start Selenium Hub with Docker Compose
 ```sh
 docker-compose up
 ```
->**Note:**\
->Selenium hub run on port 4444. To check service is ready to use by access URL below:\
+> **Note:** 
+> Selenium hub run on port 4444. To check service is ready to use by access URL below:
 > http://localhost:4444/grid/console
 
 
