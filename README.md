@@ -3,17 +3,17 @@ _Scrape website data from specific URL from Chrome Browser with Selenium in Dock
 
 ## Docker: for Selenium Hub with Chrome Driver
 Start Selenium Hub with Docker Compose
-```sh
+```bash
 docker-compose up
 ```
-> **Note:** 
-> Selenium hub run on port 4444. To check service is ready to use by access URL below:
-> http://localhost:4444/grid/console
+> **Note:**  
+Selenium hub run on port 4444. To check service is ready to use by access URL below:  
+http://localhost:4444/grid/console  
 
 
 ## Python: Web Scraper script
 Get project ready
-```sh
+```bash
 python -m pip install --upgrade pip
 python -m venv venv
 . venv/bin/activate
@@ -21,7 +21,7 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 Start services
-```sh
+```bash
 python services.py
 ```
 
