@@ -182,6 +182,27 @@ def write_json_file(html, filename=""):
         if len(cl) > 0:
             json_data['html_tags'][tag] = cl
 
+    link_tags = []
+    links = soupobj.find_all('a')
+    for link in links:
+        link_tags.append({'text': link.text.strip(), 'href': link.get('href'.strip())})
+    if len(link_tags) > 0:
+        json_data['Links'] = link_tags
+
+    images_tags = []
+    images = soupobj.find_all('img')
+    for image in images:
+        try:
+            title_attr=image.get('alt')
+        except:
+            title_attr=image.get('title')
+        if title_attr:
+            images_tags.append({'title': title_attr, 'src': image.get('src'.strip())})
+        else:
+            images_tags.append({'src': image.get('src'.strip())})
+    if len(images_tags) > 0:
+        json_data['Images'] = images_tags
+
     json_load = json.dumps(json_data)
     # print(json_load) # <-- Debug
     f = open(filename, 'w')
