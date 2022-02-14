@@ -11,24 +11,28 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
+from pymongo import MongoClient
 
 # Define Variables
 storage_path = 'Storage/'
 browser_mode = 'Remote' # Remote: Docker Browser, Local: Machine Browser
 debug_mode = 0 # 0: Off, 1: On
-json_data = {
-    'URL': "",
-    'Revisions': "",
-    'Date': "",
-    'file_path': {},
-    'head_tags': {},
-    'html_tags': {}
-}
+json_data = {}
 
 def web_scraper(url, drivertype='Remote'):
-    global browser_mode
+    global browser_mode, json_data
     browser_mode = drivertype
     
+    json_data = None
+    json_data = {
+        'URL': "",
+        'Revisions': "",
+        'Date': "",
+        'file_path': {},
+        'head_tags': {},
+        'html_tags': {}
+    }
+
     if url == "":
         print(f'URL is empty')
         return False
@@ -78,6 +82,7 @@ def web_scraper(url, drivertype='Remote'):
                 print(f'{ex}')
         browser.quit()
         write_json_file(html, file_json)
+        write_mongo()
         print(f'{str(datetime.now())} | Scrape URL Completed')
         return True
     return False
@@ -210,3 +215,15 @@ def write_json_file(html, filename=""):
     f.closed
     print(f'{str(datetime.now())} | Json File Created: {filename}')
     return True
+
+def write_mongo():
+    mongo_client = MongoClient(
+        host = ["localhost:27017"],
+        serverSelectionTimeoutMS = 3000, # 3 second timeout
+        username = "root",
+        password = "root01",
+    )
+    mongo_db=mongo_client.bigdata
+    mongo_db.webdata.insert_one(json_data)
+    print(f'{str(datetime.now())} | Insert record to MongoDB completed')
+    return False
