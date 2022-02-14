@@ -4,7 +4,7 @@ from os.path import isfile, join
 from datetime import datetime
 from py_scripts.myselenium import web_scraper
 
-browser_mode = 'Local'; # Local, Remote
+browser_mode = 'Remote'; # Local, Remote
 run_mode = "Test"
 
 if len(sys.argv) > 1:
