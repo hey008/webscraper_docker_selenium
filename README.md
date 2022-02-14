@@ -19,6 +19,7 @@ python -m venv venv
 . venv/bin/activate
 # On Windows use this '.\venv\Scripts\activate.bat'
 pip install -r requirements.txt
+cp env.py.sample env.py
 ```
 **Test Services**
 ```bash

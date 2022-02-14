@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import env
 from time import sleep
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -15,7 +16,7 @@ from pymongo import MongoClient
 
 # Define Variables
 storage_path = 'Storage/'
-browser_mode = 'Remote' # Remote: Docker Browser, Local: Machine Browser
+browser_mode = env.browser_mode
 debug_mode = 0 # 0: Off, 1: On
 json_data = {}
 
@@ -218,10 +219,10 @@ def write_json_file(html, filename=""):
 
 def write_mongo():
     mongo_client = MongoClient(
-        host = ["localhost:27017"],
+        host = env.mongo_host,
         serverSelectionTimeoutMS = 3000, # 3 second timeout
-        username = "root",
-        password = "root01",
+        username = env.mongo_user,
+        password = env.mongo_user_password,
     )
     mongo_db=mongo_client.bigdata
     mongo_db.webdata.insert_one(json_data)

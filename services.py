@@ -1,10 +1,11 @@
 import sys, os
+import env
 from os import listdir
 from os.path import isfile, join
 from datetime import datetime
 from py_scripts.myselenium import web_scraper
 
-browser_mode = 'Remote'; # Local, Remote
+browser_mode = env.browser_mode; # Local, Remote
 run_mode = "Test"
 
 if len(sys.argv) > 1:
@@ -53,10 +54,10 @@ if run_mode == "Test":
 
     if (menu == '1'):
         browser_mode = 'Local'
-        web_scraper('https://www.welovephuket.com', browser_mode)
+        web_scraper(env.test_url, browser_mode)
     elif (menu == '2'):
         browser_mode = 'Remote'
-        web_scraper('https://www.welovephuket.com', browser_mode)
+        web_scraper(env.test_url, browser_mode)
     elif (menu == '3'):
         browser_mode = 'Local'
         url = input('Enter URL (Eg. https://jane-maverick.com): ')
