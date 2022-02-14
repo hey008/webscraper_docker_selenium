@@ -20,9 +20,14 @@ python -m venv venv
 # On Windows use this '.\venv\Scripts\activate.bat'
 pip install -r requirements.txt
 ```
-Start services
+**Test Services**
 ```bash
 python services.py
+```
+
+**Production Call**
+```bash
+python .\services.py production
 ```
 
 ---
